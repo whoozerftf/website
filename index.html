@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WHZR</title>
+    <link rel="canonical" href="https://whoozer.xyz/" />
+    <link rel="icon" type="images/png" href="images/logo fix.png" />
+    <link rel="stylesheet" href="css/style.css?v=5" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="js/app.js?v=5"></script>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-left">
+        <button
+          id="mobileMenuBtn"
+          class="mobile-menu-btn"
+          aria-label="Open menu"
+        >
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+      <!-- Menu mobile -->
+      <nav id="mobileSidebar" class="mobile-sidebar">
+        <button id="closeSidebar" aria-label="Close menu">&times;</button>
+        <a href="/">SHOP</a>
+        <a href="/gallery.html">MAGZ</a>
+      </nav>
+      <div class="nav-center">
+        <img
+          src="images/new logo navbar.gif"
+          alt="Logo"
+          class="logo"
+          loading="lazy"
+          width="120"
+          height="40"
+          decoding="async"
+        />
+      </div>
+      <div class="nav-right">
+        <a href="#" id="openCart"><i data-feather="shopping-cart"></i></a>
+        <a href="user.html" id="authIcon"><i data-feather="user"></i></a>
+      </div>
+    </header>
+
+    <div class="notification-bar">
+      FREE SHIPPING FOR ORDER FROM BEKASI REGENCY
+    </div>
+
+    <!-- Produk Grid -->
+    <div class="product-grid">
+      <!-- Produk 1 -->
+      <div
+        class="product-card"
+        data-name="JUMP SHEEP"
+        data-price="155000"
+        data-front="images/baju 1.png"
+        data-back="images/baju 1 back.png"
+        data-description="Cotton 20s. Plastisol Print. First we fucking jump."
+        data-variant-id="13"
+        data-stock="Sold Out"
+        data-type="tshirt"
+      >
+        <a href="#" class="product-link" onclick="viewProduct(event, this)">
+          <div class="product-image">
+            <img
+              src="images/baju 1.webp"
+              class="front-img"
+              alt="JUMP SHEEP front"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+            <img
+              src="images/baju 1 back.webp"
+              class="back-img"
+              alt="JUMP SHEEP back"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+          </div>
+        </a>
+        <h3>JUMP SHEEP</h3>
+        <p class="price">Rp 155.000</p>
+        <p class="stock-label">
+          Stock: <span class="stock-value">Sold Out</span>
+        </p>
+      </div>
+
+      <!-- Produk 2 -->
+      <div
+        class="product-card"
+        data-name="FASTER 1 BLACK"
+        data-price="155000"
+        data-front="images/baju 2.webp"
+        data-back="images/baju 2 back.webp"
+        data-description="Cotton 20s. Plastisol Print. fucking fast."
+        data-variant-id="18"
+        data-stock="12"
+      >
+        <a href="#" class="product-link" onclick="viewProduct(event, this)">
+          <div class="product-image">
+            <img
+              src="images/baju 2.webp"
+              class="front-img"
+              alt="FASTER 1 BLACK front"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+            <img
+              src="images/baju 2 back.webp"
+              class="back-img"
+              alt="FASTER 1 BLACK back"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+          </div>
+        </a>
+        <h3>FASTER 1 BLACK</h3>
+        <p class="price">Rp 155.000</p>
+        <p class="stock-label">Stock: <span class="stock-value">12</span></p>
+      </div>
+
+      <!-- Produk 3 -->
+      <div
+        class="product-card"
+        data-name="FASTER 1 WHITE"
+        data-price="155000"
+        data-front="images/baju 3.png"
+        data-back="images/baju 3 back.png"
+        data-description="Cotton 20s. Plastisol Print. fucking fast."
+        data-variant-id="50"
+        data-stock="12"
+      >
+        <a href="#" class="product-link" onclick="viewProduct(event, this)">
+          <div class="product-image">
+            <img
+              src="images/baju 3.webp"
+              class="front-img"
+              alt="FASTER 1 WHITE front"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+            <img
+              src="images/baju 3 back.webp"
+              class="back-img"
+              alt="FASTER 1 WHITE back"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+          </div>
+        </a>
+        <h3>FASTER 1 WHITE</h3>
+        <p class="price">Rp 155.000</p>
+        <p class="stock-label">Stock: <span class="stock-value">12</span></p>
+      </div>
+       <!-- Produk 4 -->
+      <div
+        class="product-card"
+        data-name="NOT FOR SATAN"
+        data-price="220000"
+        data-front="images/konzdepan.png"
+        data-back="images/konzback.png"
+        data-description="Cotton Japan 16s. Plascharge."
+        data-variant-id="120"
+        data-stock="12"
+        data-type="longsleeve"
+      >
+        <a href="#" class="product-link" onclick="viewProduct(event, this)">
+          <div class="product-image">
+            <img
+              src="images/konzdepan.png"
+              class="front-img"
+              alt="NOT FOR SATAN front"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+            <img
+              src="images/konzback.png"
+              class="back-img"
+              alt="NOT FOR SATAN back"
+              loading="lazy" width="500" height="500" decoding="async"
+            />
+          </div>
+        </a>
+        <h3>NOT FOR SATAN</h3>
+        <p class="price">Rp 220.000</p>
+        <p class="stock-label">Stock: <span class="stock-value"></span></p>
+      </div>
+    </div>
+
+    <!-- Sidebar Cart -->
+    <div id="cartSidebar">
+      <h3>Your Cart</h3>
+      <button id="closeCart" class="close-cart-btn">&times;</button>
+      <div id="cartItems"></div>
+      <p class="cart-total">Total: Rp <span id="cartTotal">0</span></p>
+      <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+    </div>
+
+    <!-- Privacy Policy Popup -->
+    <div class="privacy-banner">
+      <p>
+        We use cookies and similar technologies to help personalize content,
+        tailor and measure ads, and provide a better experience. By clicking
+        "Accept All" you agree to all cookies. You can also choose to reject
+        cookies by clicking "Decline". For more information, please see our
+        <a
+          href="privacypolicy.html"
+          style="color: #e5ff00; text-decoration: underline"
+          >Privacy Policy</a
+        >.
+      </p>
+      <div class="privacy-actions">
+        <button class="btn-outline">Decline</button>
+        <button class="btn-solid">Accept All</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        <a
+          href="contactus.html"
+          style="color: #e5ff00"
+        >
+          Contact Us
+        </a>
+        &nbsp;|&nbsp;
+        <a href= "terms.html" style="color: #e5ff00"
+          >Terms of Services</a
+        >
+        &nbsp;|&nbsp;
+        <a
+          href="aboutus.html"
+          style="color: #e5ff00"
+        >
+          About Us
+        </a>
+      </p>
+      <p>&copy; 2025 WHOOZER. All Rights Reserved</p>
+    </footer>
+
+    <!-- Scripts -->
+    <!-- Firebase CDN (classic) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js?v=4"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js?v=4"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js?v=4"></script>
+    <!-- Firebase config (non-module) -->
+    <script src="js/firebase-config.js?v=4"></script>
+    <script>
+      // === Update stock label on product grid from backend, match product.html logic ===
+      document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('.product-card').forEach(async (card) => {
+          const variantId = card.getAttribute('data-variant-id');
+          const stockLabel = card.querySelector('.stock-label .stock-value');
+          if (!variantId || !stockLabel) return;
+          let backendUrl = '';
+          if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            backendUrl = `http://localhost:3001/api/stock/${variantId}`;
+          } else {
+            backendUrl = `https://railway-production-6ee5.up.railway.app/api/stock/${productId}`
+          }
+          try {
+            const res = await fetch(backendUrl);
+            if (!res.ok) throw new Error('Gagal fetch stok');
+            const data = await res.json();
+            // === Logic: handle simple and variable products ===
+            let totalStock = 0;
+            let isSimpleProduct = false;
+            if (typeof data === 'number') {
+              // Simple product, stock is a number
+              totalStock = data;
+              isSimpleProduct = true;
+            } else if (typeof data === 'object' && data !== null) {
+              // Variable product, sum all sizes
+              Object.values(data).forEach(val => { if (typeof val === 'number') totalStock += val; });
+            }
+            // === UI update ===
+            if (totalStock > 0) {
+              stockLabel.textContent = totalStock;
+              card.setAttribute('data-stock', totalStock);
+              card.classList.remove('sold-out');
+              // Enable add-to-cart button if exists
+              const addBtn = card.querySelector('.add-cart-btn');
+              if (addBtn) {
+                addBtn.disabled = false;
+                addBtn.classList.remove('btn-soldout');
+                addBtn.textContent = 'Add to Cart';
+                addBtn.onclick = null;
+              }
+            } else {
+              stockLabel.textContent = 'Sold Out';
+              card.setAttribute('data-stock', 'Sold Out');
+              card.classList.add('sold-out');
+              // Disable add-to-cart button if exists
+              const addBtn = card.querySelector('.add-cart-btn');
+              if (addBtn) {
+                addBtn.disabled = true;
+                addBtn.classList.add('btn-soldout');
+                addBtn.textContent = 'Sold Out';
+                addBtn.onclick = () => {
+                  alert('Stock baju sudah sold out, tidak bisa dipesan.');
+                };
+              }
+            }
+          } catch (e) {
+            stockLabel.textContent = '-';
+          }
+        });
+      });
+    </script>
+    <script>
+      // ...existing code...
+            function toggleMenu() {
+              document.querySelector(".nav-links").classList.toggle("active");
+            }
+            feather.replace();
+
+            const openCartBtn = document.getElementById("openCart");
+            const closeCartBtn = document.getElementById("closeCart");
+            const cartSidebar = document.getElementById("cartSidebar");
+            const cartItemsEl = document.getElementById("cartItems");
+            const cartTotalEl = document.getElementById("cartTotal");
+            const checkoutBtn = document.getElementById("checkoutBtn");
+            const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            function updateCart() {
+              cartItemsEl.innerHTML = "";
+              let total = 0;
+
+              cart.forEach((item, index) => {
+                total += item.price * item.qty;
+                cartItemsEl.innerHTML += `
+                <div class="cart-item">
+                  <h4>${item.name}</h4>
+                  <p>Size: ${item.size ? item.size : "-"}</p>
+                  <p>Rp ${item.price.toLocaleString("id-ID")} x ${item.qty}</p>
+                  <div class="qty-control">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                  </div>
+                </div>
+              `;
+              });
+
+              cartTotalEl.textContent = total.toLocaleString("id-ID");
+              localStorage.setItem("cart", JSON.stringify(cart));
+            }
+
+            function changeQty(index, delta) {
+              cart[index].qty += delta;
+              if (cart[index].qty <= 0) cart.splice(index, 1);
+              updateCart();
+            }
+
+            window.onload = () => {
+              updateCart();
+            };
+
+            window.changeQty = changeQty;
+
+            // Validasi elemen sebelum menambahkan event listener
+            document.querySelectorAll(".add-cart-btn").forEach((btn) => {
+              if (!btn) return;
+              btn.addEventListener("click", () => {
+                const card = btn.closest(".product-card");
+                const name = card.getAttribute("data-name");
+                const price = parseInt(card.getAttribute("data-price"));
+
+                const existing = cart.find((item) => item.name === name);
+                if (existing) {
+                  existing.qty += 1;
+                } else {
+                  cart.push({ name, price, qty: 1 });
+                }
+
+                updateCart();
+                cartSidebar.classList.add("active");
+              });
+            });
+
+            openCartBtn.addEventListener("click", () =>
+              cartSidebar.classList.add("active")
+            );
+            closeCartBtn.addEventListener("click", () =>
+              cartSidebar.classList.remove("active")
+            );
+
+            // Ubah semua referensi ke index.html menjadi root domain
+            const links = document.querySelectorAll('a[href="index.html"]');
+            links.forEach((link) => {
+              link.href = "/";
+            });
+
+            function addOrderToFirestore(orderData) {
+              firestore
+                .collection("orders")
+                .add(orderData)
+                .then((docRef) => {
+                  alert("Order berhasil disimpan! ID: " + docRef.id);
+                })
+                .catch((error) => {
+                  alert("Terjadi kesalahan: " + error.message);
+                });
+            }
+
+checkoutBtn.addEventListener("click", () => {
+  if (cart.length === 0) {
+    alert("Keranjang kosong.");
+    return;
+  }
+
+  const products = [];
+
+  cart.forEach((item) => {
+    // Mapping berdasarkan nama produk
+    if(item.name === "JUMP SHEEP") {
+      let size = item.size?.toLowerCase();
+      let mapping = { s: 99, m: 100, l: 101, xl: 102};
+      if (mapping[size]) {
+        products.push({
+          id: 13,
+          variationId: mapping[size],
+          attributes: {
+            "attribute_pa_color": "black",
+            "attribute_pa_size": size
+          },
+          quantity: item.qty
+        });
+       }
+    }
+    
+    if (item.name === "FASTER 1 BLACK") {
+      let size = item.size?.toLowerCase();
+      let mapping = { s: 68, m: 69, l: 70, xl: 71 };
+      if (mapping[size]) {
+        products.push({
+          id: 18,
+          variationId: mapping[size],
+          attributes: {
+            "attribute_pa_color": "black",
+            "attribute_pa_size": size
+          },
+          quantity: item.qty
+        });
+      }
+    }
+
+    if (item.name === "FASTER 1 WHITE" || item.name === "WHOOZER WHITE") {
+      let size = item.size?.toLowerCase();
+      let mapping = { s: 73, m: 74, l: 75, xl: 76 };
+      if (mapping[size]) {
+        products.push({
+          id: 50,
+          variationId: mapping[size],
+          attributes: {
+            "attribute_pa_color": "white",
+            "attribute_pa_size": size
+          },
+          quantity: item.qty
+        });
+      }
+    }
+
+     if (item.name === "NOT FOR SATAN" || item.name === "NOT FOR SATAN BLACK") {
+      let size = item.size?.toLowerCase();
+      let mapping = { s: 121, m: 122, l: 123, xl: 124 };
+      if (mapping[size]) {
+        products.push({
+          id: 120,
+          variationId: mapping[size],
+          attributes: {
+            "attribute_pa_color": "black",
+            "attribute_pa_size": size
+          },
+          quantity: item.qty
+        });
+      }
+    }
+    // Tambahkan else if/else untuk produk lain jika perlu
+  });
+
+  if (products.length === 0) {
+    alert("Tidak ada produk valid di keranjang.");
+    return;
+  }
+
+  let index = 0;
+
+  function addNext() {
+    if (index >= products.length) {
+      window.location.href = "https://checkout.whoozer.xyz/checkout/";
+      return;
+    }
+
+    const p = products[index];
+    const attrParams = new URLSearchParams(p.attributes).toString();
+    const url = `https://checkout.whoozer.xyz/?add-to-cart=${p.id}&variation_id=${p.variationId}&${attrParams}&quantity=${p.quantity}`;
+
+    fetch(url, { credentials: 'include' })
+      .then(() => {
+        index++;
+        addNext();
+      })
+      .catch(() => {
+        alert('Gagal menambah produk ke keranjang.');
+      });
+  }
+
+  addNext();
+});
+
+            function viewProduct(event, element) {
+              const card = element.closest(".product-card");
+              const productData = {
+                name: card.getAttribute("data-name"),
+                price: parseInt(card.getAttribute("data-price")),
+                frontImg: card.getAttribute("data-front"),
+                backImg: card.getAttribute("data-back"),
+                description: card.getAttribute("data-description"),
+                variantId: card.getAttribute("data-variant-id"),
+                type: card.getAttribute("data-type") || "tshirt"
+              };
+              localStorage.setItem("selectedProduct", JSON.stringify(productData));
+              window.location.href = "product.html";
+            }
+            window.viewProduct = viewProduct;
+
+            const sidebar = document.getElementById("mobileSidebar");
+            const openBtn = document.getElementById("mobileMenuBtn");
+            const closeBtn = document.getElementById("closeSidebar");
+
+            openBtn.addEventListener("click", function (e) {
+              e.stopPropagation();
+              sidebar.classList.add("active");
+            });
+            closeBtn.addEventListener("click", function () {
+              sidebar.classList.remove("active");
+            });
+            // Klik di luar sidebar untuk menutup
+            document.addEventListener("click", function (e) {
+              if (
+                sidebar.classList.contains("active") &&
+                !sidebar.contains(e.target) &&
+                e.target !== openBtn &&
+                !openBtn.contains(e.target)
+              ) {
+                sidebar.classList.remove("active");
+              }
+            });
+
+            // Privacy Policy Banner logic (versi baru sesuai HTML)
+            const privacyBanner = document.querySelector(".privacy-banner");
+            const btnAccept = document.querySelector(".privacy-banner .btn-solid");
+            const btnDecline = document.querySelector(".privacy-banner .btn-outline");
+
+            if (privacyBanner && btnAccept && btnDecline) {
+              // Hanya tampil jika belum ada consent
+              if (
+                localStorage.getItem("privacyAccepted") !== "true" &&
+                localStorage.getItem("privacyAccepted") !== "false"
+              ) {
+                privacyBanner.style.display = "block";
+              } else {
+                privacyBanner.style.display = "none";
+              }
+              btnAccept.onclick = function () {
+                localStorage.setItem("privacyAccepted", "true");
+                privacyBanner.style.display = "none";
+              };
+              btnDecline.onclick = function () {
+                localStorage.setItem("privacyAccepted", "false");
+                privacyBanner.style.display = "none";
+                window.location.href = "https://www.google.com";
+              };
+
+              document.querySelectorAll('.product-card').forEach(card => {
+        const stock = card.getAttribute('data-stock');
+        const addBtn = card.querySelector('.add-cart-btn');
+        const stockLabel = card.querySelector('.stock-label');
+        if (stock && stock.toLowerCase() === 'sold out') {
+          card.classList.add('sold-out');
+          // Jangan ubah display gambar, biarkan front-img dan back-img tetap tampil dan berfungsi seperti biasa
+          if (addBtn) {
+            addBtn.disabled = true;
+            addBtn.classList.add('btn-soldout');
+            addBtn.textContent = 'Sold Out';
+            addBtn.onclick = () => {
+              alert('Stock baju sudah sold out, tidak bisa dipesan.');
+            };
+          }
+          if (stockLabel) {
+            stockLabel.classList.add('sold-out');
+            stockLabel.innerHTML = 'Stock: <span class="stock-value">Sold Out</span>';
+          }
+        }
+      });
+            } // <-- Add this closing brace for the if block
+
+            // Sembunyikan label stok di index.html
+            const stockLabels = document.querySelectorAll('.stock-label, .stock-value');
+            stockLabels.forEach(el => {
+              el.style.display = 'none';
+            });
+    </script>
+  </body>
+</html>

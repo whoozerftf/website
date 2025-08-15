@@ -1,0 +1,929 @@
+<!-- cspell:ignore -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WHZR</title>
+    <link rel="icon" type="images/png" href="images/logo fix.png" />
+    <link rel="stylesheet" href="css/product.css?v=3" />
+    <link rel="canonical" href="https://whoozer.xyz/" />
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-left">
+        <button
+          id="mobileMenuBtn"
+          class="mobile-menu-btn"
+          aria-label="Open menu"
+        >
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+      <div class="nav-center">
+        <img src="images/new logo navbar.gif" alt="Logo" class="logo" />
+      </div>
+      <div class="nav-right" style="position:relative;">
+        <a href="#" id="openCart" style="position:relative;">
+          <i data-feather="shopping-cart"></i>
+          <span id="cartCountBadge" style="display:none;position:absolute;top:-8px;right:-8px;background:#e5ff00;color:#000;font-weight:bold;font-size:13px;padding:2px 7px;border-radius:50%;min-width:22px;text-align:center;z-index:10;"></span>
+        </a>
+        <a href="user.html" id="authIcon"><i data-feather="user"></i></a>
+      </div>
+      <nav id="mobileSidebar" class="mobile-sidebar">
+        <button id="closeSidebar" aria-label="Close menu">&times;</button>
+        <a href="/">SHOP</a>
+        <a href="/gallery.html">MAGZ</a>
+      </nav>
+    </header>
+
+    <!-- Sidebar Cart -->
+    <div id="cartSidebar" class="cart-sidebar">
+      <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button id="closeCart" class="close-cart-btn">&times;</button>
+      </div>
+
+      <div id="cartItems" class="cart-items"></div>
+
+      <div class="cart-footer">
+        <p>Total: Rp <span id="cartTotal">0</span></p>
+        <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+      </div>
+    </div>
+
+    <!-- Product Detail Section -->
+    <div class="product-detail-container">
+      <div class="product-image">
+        <div id="productImageSlider" class="product-image-slider">
+          <!-- Gambar utama akan diisi JS -->
+        </div>
+        <button class="prev-btn" onclick="prevImage()">❮</button>
+        <button class="next-btn" onclick="nextImage()">❯</button>
+      </div>
+      <div class="product-thumbnails" id="productThumbnails"></div>
+
+      <div class="product-info">
+        <h2 id="productName"></h2>
+        <p class="price" id="productPrice"></p>
+
+        <div class="size-select" id="sizeSelectContainer">
+          <!-- Size radio akan di-render dinamis agar bisa diberi tanda out of stock -->
+        </div>
+
+        <div class="product-actions">
+          <button class="size-guide-btn" onclick="openSizeGuide()">
+            Size Guide
+          </button>
+          <button class="add-to-cart-btn" onclick="addToCart()">
+            Add to Cart
+          </button>
+        </div>
+        <ul class="product-details" id="productDescription"></ul>
+        <p class="stock-label">Stock: <span id="detailStock"></span></p>
+      </div>
+    </div>
+
+    <!-- Size Guide Modal -->
+    <div class="modal" id="sizeGuideModal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeSizeGuide">&times;</span>
+        <h3>Size Guide</h3>
+        <img
+          src="images/size chart.webp"
+          alt="Size Guide"
+          class="size-guide-img"
+        />
+      </div>
+    </div>
+
+    <!-- Popup Notif Stock Habis -->
+    <div id="stockNotif" class="stock-notif">Stok produk habis!</div>
+
+    <!-- Rekomendasi Produk -->
+    <section class="recommended-section">
+      <h3 class="recommended-title">Recommended Products</h3>
+      <div class="recommended-products" id="recommendedProducts"></div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        <a
+          href="contactus.html"
+          style="color: #e5ff00;"
+        >
+          Contact Us
+        </a>
+        &nbsp;|&nbsp;
+        <a href="terms.html" style="color: #e5ff00;"
+          >Terms of Services</a
+        >
+        &nbsp;|&nbsp;
+        <a
+          href="aboutus.html"
+          style="color: #e5ff00;"
+        >
+          About Us
+        </a>
+      </p>
+      <p>&copy; 2025 WHOOZER. All Rights Reserved</p>
+    </footer>
+
+    <!-- Firebase CDN (classic) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js?v=4"?v=3"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js?v=4"?v=3"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js?v=4"?v=3"></script>
+    <!-- Firebase config (non-module) -->
+    <script src="js/firebase-config.js?v=4"></script>
+    <!-- Main Script -->
+    <script>
+      // === Main Script ===
+      document.addEventListener("DOMContentLoaded", async function () {
+        // === Ambil data produk dari Firestore ===
+        let selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
+        let product = null;
+        // Normalisasi nama untuk pencocokan fleksibel
+        function normalizeName(str) {
+          return (str || "").toString().trim().toLowerCase();
+        }
+        const selectedNama = selectedProduct ? (selectedProduct.nama || selectedProduct.name) : null;
+        if (selectedProduct && selectedNama) {
+          try {
+            // Ambil semua produk, lalu cari yang namanya mirip (case-insensitive, trim)
+            const productsRef = db.collection("produk");
+            const querySnapshot = await productsRef.get();
+            let foundDoc = null;
+            querySnapshot.forEach(doc => {
+              const data = doc.data();
+              if (normalizeName(data.nama) === normalizeName(selectedNama)) {
+                foundDoc = data;
+              }
+            });
+            if (foundDoc) {
+              product = foundDoc;
+              // Fallback: jika Firestore tidak punya variantId, ambil dari selectedProduct
+              if (!product.variantId && selectedProduct.variantId) {
+                product.variantId = selectedProduct.variantId;
+              }
+              console.log("Produk diambil dari Firestore:", product);
+            } else {
+              product = selectedProduct;
+              console.log("Produk fallback dari localStorage:", product);
+            }
+          } catch (e) {
+            console.error("Gagal fetch produk dari Firestore:", e);
+            product = selectedProduct;
+          }
+        }
+
+        if (!product) {
+          alert("Data produk tidak ditemukan.");
+          window.location.href = "index.html";
+          return;
+        }
+        // Log WooCommerce Product ID setelah product terdefinisi
+        console.log("WooCommerce Product ID (variantId):", product.variantId);
+
+        // Pastikan field sesuai Firestore
+        // nama, harga, stok, deskripsi, gambar depan, gambar belakang
+        const nama = product.nama || product.name || "";
+        const harga = product.harga || product.price || 0;
+        const stok = typeof product.stok !== 'undefined' ? (typeof product.stok === 'string' ? parseInt(product.stok, 10) : product.stok) : 0;
+        const deskripsi = product.deskripsi || product.description || "";
+        const frontImg = product["gambar depan"] || product.frontImg || "";
+        const backImg = product["gambar belakang"] || product.backImg || "";
+
+        document.getElementById("detailStock").textContent = stok === 0 ? "Sold Out" : stok;
+        document.getElementById("productName").textContent = nama;
+        document.getElementById("productPrice").textContent =
+          "Rp " + harga.toLocaleString("id-ID");
+
+        const descList = document.getElementById("productDescription");
+        const descItems = deskripsi.split(".").filter(Boolean);
+        descList.innerHTML = descItems
+          .map((item) => `<li>${item.trim()}.</li>`)
+          .join("");
+
+        const images = [frontImg, backImg].filter(Boolean);
+        let currentImage = 0;
+
+        function renderMainImage(index, direction = 0) {
+          const slider = document.getElementById("productImageSlider");
+          if (!slider) return;
+          // Efek slide geser untuk semua device
+          if (direction !== 0 && slider.children.length > 0) {
+            const oldImg = slider.querySelector('img');
+            const newImg = document.createElement('img');
+            newImg.src = images[index] || '';
+            newImg.alt = 'Product Image';
+            newImg.className = 'main-product-img';
+            newImg.setAttribute('loading', 'lazy');
+            newImg.width = 600;
+            newImg.height = 600;
+            newImg.style.position = 'absolute';
+            newImg.style.top = '0';
+            newImg.style.left = direction > 0 ? '100%' : '-100%';
+            newImg.style.transition = 'left 2s cubic-bezier(0.77,0,0.175,1)'; // Lebih smooth
+            oldImg.style.position = 'absolute';
+            oldImg.style.top = '0';
+            oldImg.style.left = '0';
+            oldImg.style.transition = 'left 2s cubic-bezier(0.77,0,0.175,1)'; // Lebih smooth
+            slider.appendChild(newImg);
+            setTimeout(() => {
+              newImg.style.left = '0';
+              oldImg.style.left = direction > 0 ? '-100%' : '100%';
+            }, 10);
+            setTimeout(() => {
+              if (slider.contains(oldImg)) slider.removeChild(oldImg);
+              newImg.style.position = '';
+              newImg.style.top = '';
+              newImg.style.left = '';
+              newImg.style.transition = '';
+            }, 1100); // Sesuaikan dengan durasi transisi
+          } else {
+            slider.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = images[index] || '';
+            img.alt = 'Product Image';
+            img.className = 'main-product-img';
+            img.setAttribute('loading', 'lazy');
+            img.width = 600;
+            img.height = 600;
+            slider.appendChild(img);
+          }
+        }
+
+        function renderThumbnails() {
+          const thumbContainer = document.getElementById('productThumbnails');
+          if (!thumbContainer) return;
+          thumbContainer.innerHTML = images.map((src, idx) =>
+            `<img src="${src}" class="thumbnail-img${idx === currentImage ? ' active' : ''}" data-idx="${idx}" alt="thumb" loading="lazy" width="80" height="80">`
+          ).join('');
+          // Event listener
+          thumbContainer.querySelectorAll('.thumbnail-img').forEach(img => {
+            img.addEventListener('click', function() {
+              const idx = parseInt(this.getAttribute('data-idx'));
+              if (idx !== currentImage) {
+                const direction = idx > currentImage ? 1 : -1;
+                currentImage = idx;
+                renderMainImage(currentImage, direction);
+                renderThumbnails();
+              }
+            });
+          });
+        }
+
+        window.prevImage = function () {
+          const prev = (currentImage - 1 + images.length) % images.length;
+          currentImage = prev;
+          renderMainImage(currentImage, -1);
+          renderThumbnails();
+        };
+        window.nextImage = function () {
+          const next = (currentImage + 1) % images.length;
+          currentImage = next;
+          renderMainImage(currentImage, 1);
+          renderThumbnails();
+        };
+        renderMainImage(currentImage);
+        renderThumbnails();
+
+        let cartData = localStorage.getItem("cart");
+        let cart = [];
+        try {
+          cart = JSON.parse(cartData) || [];
+          if (!Array.isArray(cart)) throw new Error("Invalid cart format");
+        } catch (e) {
+          console.error("Invalid cart data in localStorage. Resetting cart.", e);
+          cart = [];
+          localStorage.setItem("cart", JSON.stringify(cart));
+        }
+
+
+        function updateCart() {
+          const cartItemsEl = document.getElementById("cartItems");
+          const cartTotalEl = document.getElementById("cartTotal");
+          const cartCountBadge = document.getElementById("cartCountBadge");
+          cartItemsEl.innerHTML = "";
+          let total = 0;
+          let itemCount = 0;
+
+          cart.forEach((item, index) => {
+            total += item.price * item.qty;
+            itemCount += item.qty;
+            cartItemsEl.innerHTML += `
+                <div class="cart-item">
+                  <h4>${item.name}</h4>
+                  <p>Size: ${item.size}</p>
+                  <p>Rp ${item.price.toLocaleString("id-ID")} x ${item.qty}</p>
+                  <div class="qty-control">
+                    <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                    <span>${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                  </div>
+                </div>
+              `;
+          });
+
+          cartTotalEl.textContent = total.toLocaleString("id-ID");
+          localStorage.setItem("cart", JSON.stringify(cart));
+
+          // Update badge
+          if (cartCountBadge) {
+            if (itemCount > 0) {
+              cartCountBadge.textContent = itemCount;
+              cartCountBadge.style.display = 'inline-block';
+            } else {
+              cartCountBadge.style.display = 'none';
+            }
+          }
+        }
+
+        window.changeQty = function (index, delta) {
+          cart[index].qty += delta;
+          if (cart[index].qty <= 0) cart.splice(index, 1);
+          localStorage.setItem("cart", JSON.stringify(cart));
+          updateCart();
+        };
+
+        updateCart();
+
+        // Pastikan feather icons sudah tersedia sebelum replace
+        if (window.feather && typeof feather.replace === 'function') {
+          feather.replace();
+        } else {
+          console.warn('Feather icons library tidak ditemukan!');
+        }
+
+        const openCartBtn = document.getElementById("openCart");
+        const closeCartBtn = document.getElementById("closeCart");
+        const cartSidebar = document.getElementById("cartSidebar");
+        const checkoutBtn = document.getElementById("checkoutBtn");
+
+        function updateCheckoutButton() {
+          if (!checkoutBtn) return;
+          if (stok === 0 || stok === "0" || stok === undefined) {
+            checkoutBtn.disabled = true;
+            checkoutBtn.textContent = "Out of Stock";
+            checkoutBtn.classList.add("out-of-stock");
+          } else {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = "Checkout";
+            checkoutBtn.classList.remove("out-of-stock");
+          }
+        }
+
+        updateCheckoutButton();
+
+
+
+        // --- Ambil stok dari WooCommerce API, handle produk simple & variable ---
+        let stokObj = { S: 0, M: 0, L: 0, XL: 0 };
+        let selectedSize = null;
+        let isSimpleProduct = false;
+        let simpleStock = 0;
+
+        // --- Ambil stok langsung dari WooCommerce REST API ---
+        async function fetchWooStock() {
+          try {
+            const productId = product.variantId;
+            if (!productId) {
+              console.error('[STOCK] product.variantId is missing or undefined! Cannot fetch stock.');
+              window.showStockNotif('Stok tidak dapat diambil: ID produk tidak ditemukan.');
+              return;
+            }
+            // Coba fetch dari WooCommerce Store API (tanpa auth)
+            let data = null;
+            let isStoreApiOk = false;
+            try {
+              const res = await fetch(`https://checkout.whoozer.xyz/wp-json/wc/store/products/${productId}`);
+              if (res.ok) {
+                data = await res.json();
+                isStoreApiOk = true;
+              }
+            } catch (e) {}
+            if (isStoreApiOk && data && data.type === 'simple') {
+              isSimpleProduct = true;
+              // Ambil stok dari stock_quantity, jika tidak ada, parsing dari stock_availability.text
+              if (typeof data.stock_quantity !== 'undefined') {
+                simpleStock = data.stock_quantity;
+              } else if (data.stock_availability && data.stock_availability.text) {
+                // Ambil angka stok dari string, misal "12 in stock"
+                const match = data.stock_availability.text.match(/(\d+)\s+in stock/i);
+                simpleStock = match ? parseInt(match[1], 10) : 0;
+              } else {
+                simpleStock = 0;
+              }
+              stokObj = { S: simpleStock, M: simpleStock, L: simpleStock, XL: simpleStock };
+              return;
+            }
+            if (isStoreApiOk && data && data.type === 'variable') {
+              // Coba fetch variasi dari Store API (akan gagal/404), fallback ke backend proxy jika gagal
+              let varData = null;
+              let isVarOk = false;
+              try {
+                const varRes = await fetch(`https://checkout.whoozer.xyz/wp-json/wc/store/products/${productId}/variations?per_page=20`);
+                if (varRes.ok) {
+                  varData = await varRes.json();
+                  isVarOk = true;
+                }
+              } catch (e) {}
+              if (isVarOk && Array.isArray(varData)) {
+                stokObj = { S: 0, M: 0, L: 0, XL: 0 };
+                for (const v of varData) {
+                  const sizeAttr = (v.attributes || []).find(a => a.name.toLowerCase().includes('size'));
+                  if (sizeAttr && sizeAttr.option) {
+                    const size = sizeAttr.option.toUpperCase();
+                    let stock = 0;
+                    if (typeof v.stock_quantity !== 'undefined' && v.stock_quantity !== null) {
+                      stock = v.stock_quantity;
+                    } else if (v.stock_availability && v.stock_availability.text) {
+                      // Ambil angka stok dari string, misal "12 in stock"
+                      const match = v.stock_availability.text.match(/(\d+)\s+in stock/i);
+                      stock = match ? parseInt(match[1], 10) : 0;
+                    } else if (v.stock_status === 'instock') {
+                      stock = 99;
+                    } else {
+                      stock = 0;
+                    }
+                    stokObj[size] = stock;
+                  }
+                }
+                return;
+              }
+              // Fallback ke backend proxy jika Store API gagal
+            }
+            // Fallback ke backend proxy (Node.js/Express) untuk semua tipe jika Store API gagal
+            // Cek origin: jika localhost, pakai /api/stock, jika production, pakai endpoint backend Anda
+            let backendUrl = '';
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+              backendUrl = `http://localhost:3000/api/stock/${productId}`;
+            } else {
+              backendUrl = `https://railway-production-6ee5.up.railway.app/api/stock/${productId}`
+            }
+            try {
+              const res = await fetch(backendUrl);
+              if (!res.ok) throw new Error('Gagal ambil data dari backend proxy');
+              const stockData = await res.json();
+              // Format backend: { S: 0, M: 0, L: 0, XL: 0 } atau { ALL: 0 }
+              if (stockData.ALL !== undefined) {
+                isSimpleProduct = true;
+                simpleStock = stockData.ALL;
+                stokObj = { S: simpleStock, M: simpleStock, L: simpleStock, XL: simpleStock };
+              } else {
+                stokObj = { S: 0, M: 0, L: 0, XL: 0, ...stockData };
+              }
+            } catch (e) {
+              console.error('Gagal ambil stok dari backend proxy:', e);
+              window.showStockNotif('Gagal mengambil stok dari server. Pastikan koneksi ke backend.');
+            }
+          } catch (e) {
+            console.error('Gagal ambil stok dari WooCommerce:', e);
+            window.showStockNotif('Gagal mengambil stok dari server. Pastikan koneksi ke WooCommerce.');
+          }
+          // Fallback: jika semua gagal, stokObj tetap default (semua 0)
+        }
+
+        await fetchWooStock();
+
+        // Render radio size dinamis
+        const sizeSelectContainer = document.getElementById("sizeSelectContainer");
+
+        // Selalu render pilihan size (S, M, L, XL), baik simple maupun variable
+        const sizeList = ["S", "M", "L", "XL"];
+        // Cek jika semua size out of stock (sold out)
+        let allOut = true;
+        sizeSelectContainer.innerHTML = sizeList.map(size => {
+          let outStock = false;
+          if (isSimpleProduct) {
+            outStock = simpleStock === 0;
+            stokObj[size] = simpleStock; // Set stok semua size sama
+          } else {
+            outStock = !stokObj[size] || stokObj[size] === 0;
+          }
+          if (!outStock) allOut = false;
+          return `<label class="size-label${outStock ? ' out-stock' : ''}">
+            <input type="radio" name="size" value="${size}" ${outStock ? 'disabled' : ''} /> ${size}
+          </label>`;
+        }).join("");
+        // Jika semua size out of stock, tampilkan pesan sold out dan disable tombol checkout & add to cart
+        if (allOut) {
+          document.getElementById("detailStock").textContent = "Sold Out";
+          if (checkoutBtn) {
+            checkoutBtn.disabled = true;
+            checkoutBtn.textContent = "Out of Stock";
+            checkoutBtn.classList.add("out-of-stock");
+          }
+          const addToCartBtn = document.querySelector('.add-to-cart-btn');
+          if (addToCartBtn) {
+            addToCartBtn.disabled = true;
+            addToCartBtn.textContent = "Out of Stock";
+            addToCartBtn.classList.add("out-of-stock");
+          }
+        } else {
+          if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.textContent = "Checkout";
+            checkoutBtn.classList.remove("out-of-stock");
+          }
+          const addToCartBtn = document.querySelector('.add-to-cart-btn');
+          if (addToCartBtn) {
+            addToCartBtn.disabled = false;
+            addToCartBtn.textContent = "Add to Cart";
+            addToCartBtn.classList.remove("out-of-stock");
+          }
+        }
+        // Set default size (S) saat load jika ada stok
+        const sizeRadiosMain = document.querySelectorAll('.size-select input[type="radio"]');
+        let found = false;
+        sizeRadiosMain.forEach((radio) => {
+          if (!found && !radio.disabled) {
+            radio.checked = true;
+            selectedSize = radio.value;
+            found = true;
+          }
+          radio.addEventListener('change', function() {
+            selectedSize = this.value;
+            updateStockLabel(selectedSize);
+          });
+        });
+        // Tambahkan CSS dinamis jika belum ada
+
+
+        updateStockLabel(selectedSize);
+
+        function updateStockLabel(size) {
+          const stockLabel = document.getElementById("detailStock");
+          if (!size || typeof stokObj[size] === 'undefined') {
+            stockLabel.textContent = '-';
+          } else {
+            stockLabel.textContent = stokObj[size] === 0 ? "Sold Out" : stokObj[size];
+          }
+        }
+
+        window.addToCart = function () {
+          let size;
+          if (isSimpleProduct) {
+            size = { value: "ALL" };
+          } else {
+            size = document.querySelector('input[name="size"]:checked');
+            if (!size) {
+              window.showStockNotif("Silakan pilih ukuran terlebih dahulu.");
+              return;
+            }
+          }
+          // Cek jika size yang dipilih out of stock
+          if (!stokObj[size.value] || stokObj[size.value] === 0) {
+            window.showStockNotif("Ukuran yang dipilih sedang habis (out of stock)");
+            return;
+          }
+
+          // --- ANIMASI FLY TO CART ---
+          const mainImg = document.querySelector('.main-product-img');
+          const cartIcon = document.getElementById('openCart');
+          if (mainImg && cartIcon) {
+            const imgRect = mainImg.getBoundingClientRect();
+            const cartRect = cartIcon.getBoundingClientRect();
+            const clone = mainImg.cloneNode(true);
+            clone.style.position = 'fixed';
+            clone.style.left = imgRect.left + 'px';
+            clone.style.top = imgRect.top + 'px';
+            clone.style.width = imgRect.width + 'px';
+            clone.style.height = imgRect.height + 'px';
+            clone.style.zIndex = 9999;
+            clone.style.transition = 'all 0.8s cubic-bezier(0.77,0,0.175,1)';
+            document.body.appendChild(clone);
+            setTimeout(() => {
+              clone.style.left = (cartRect.left + cartRect.width/2 - imgRect.width/6) + 'px';
+              clone.style.top = (cartRect.top + cartRect.height/2 - imgRect.height/6) + 'px';
+              clone.style.width = imgRect.width/3 + 'px';
+              clone.style.height = imgRect.height/3 + 'px';
+              clone.style.opacity = '0.5';
+            }, 10);
+            setTimeout(() => {
+              clone.remove();
+            }, 850);
+          }
+
+          const existingIndex = cart.findIndex(
+            (item) => item.name === nama && item.size === size.value
+          );
+          if (existingIndex !== -1) {
+            cart[existingIndex].qty += 1;
+          } else {
+            cart.push({
+              name: nama,
+              price: harga,
+              size: size.value,
+              qty: 1,
+              variantId: product.variantId || "default",
+              frontImg: frontImg,
+              backImg: backImg,
+            });
+          }
+          localStorage.setItem("cart", JSON.stringify(cart));
+          // alert("Produk ditambahkan ke keranjang!");
+          updateCart();
+        };
+
+        // Tambahan: jika user klik label size yang out of stock, munculkan popup
+        document.querySelectorAll('.size-label.out-stock').forEach(label => {
+          label.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.showStockNotif("Ukuran yang dipilih sedang habis (out of stock)");
+          });
+        });
+
+
+        if (openCartBtn && closeCartBtn && cartSidebar) {
+          openCartBtn.addEventListener("click", () => {
+            cartSidebar.classList.add("open");
+            updateCart();
+          });
+
+          closeCartBtn.addEventListener("click", () => {
+            cartSidebar.classList.remove("open");
+          });
+
+          // Klik di luar sidebar cart untuk menutup
+          document.addEventListener("mousedown", function(e) {
+            if (cartSidebar.classList.contains("open")) {
+              // Cek jika klik di luar sidebar
+              if (!cartSidebar.contains(e.target) && e.target !== openCartBtn && !openCartBtn.contains(e.target)) {
+                cartSidebar.classList.remove("open");
+              }
+            }
+          });
+        }
+
+        window.openSizeGuide = function () {
+          const sizeGuideModal = document.getElementById("sizeGuideModal");
+          if (sizeGuideModal) {
+            sizeGuideModal.style.display = "flex";
+            const sizeGuideImg = sizeGuideModal.querySelector(".size-guide-img");
+            if (sizeGuideImg) {
+              let selectedProduct = null;
+              try {
+                selectedProduct = JSON.parse(localStorage.getItem("selectedProduct"));
+              } catch {}
+              let name = selectedProduct && selectedProduct.name ? selectedProduct.name.toLowerCase() : "";
+              if (name.includes("jump sheep")) {
+                sizeGuideImg.src = "images/size chart kambing.png";
+              } else if (name.includes("not for satan")) {
+                sizeGuideImg.src = "images/size chart konz whooz.png";
+              } else {
+                sizeGuideImg.src = "images/size chart.png";
+              }
+            }
+          }
+        };
+
+        const sizeGuideModal = document.getElementById("sizeGuideModal");
+        const closeSizeGuide = document.getElementById("closeSizeGuide");
+
+        closeSizeGuide.addEventListener("click", () => {
+          sizeGuideModal.style.display = "none";
+        });
+
+        window.addEventListener("click", (e) => {
+          if (e.target === sizeGuideModal) {
+            sizeGuideModal.style.display = "none";
+          }
+        });
+
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener("click", () => {
+            if (cart.length === 0) {
+              alert("Keranjang kosong.");
+              return;
+            }
+
+            const products = [];
+
+            cart.forEach((item) => {
+              // Mapping berdasarkan nama produk
+              if(item.name === "JUMP SHEEP") {
+                let size = item.size?.toLowerCase();
+                let mapping = { s: 99, m: 100, l: 101, xl: 102};
+                if (mapping[size]) {
+                  products.push({
+                    id: 13,
+                    variationId: mapping[size],
+                    attributes: {
+                      "attribute_pa_color": "black",
+                      "attribute_pa_size": size
+                    },
+                    quantity: item.qty
+                  });
+                }
+              }
+
+              if (item.name === "FASTER 1 BLACK") {
+                let size = item.size?.toLowerCase();
+                let mapping = { s: 64, m: 65, l: 66, xl: 67 };
+                if (mapping[size]) {
+                  products.push({
+                    id: 18,
+                    variationId: mapping[size],
+                    attributes: {
+                      "attribute_pa_color": "black",
+                      "attribute_pa_size": size
+                    },
+                    quantity: item.qty
+                  });
+                }
+              }
+
+              if (item.name === "FASTER 1 WHITE" || item.name === "WHOOZER WHITE") {
+                let size = item.size?.toLowerCase();
+                let mapping = { s: 68, m: 69, l: 70, xl: 71 };
+                if (mapping[size]) {
+                  products.push({
+                    id: 50,
+                    variationId: mapping[size],
+                    attributes: {
+                      "attribute_pa_color": "white",
+                      "attribute_pa_size": size
+                    },
+                    quantity: item.qty
+                  });
+                }
+              }
+
+               if (item.name === "NOT FOR SATAN") {
+      let size = item.size?.toLowerCase();
+      let mapping = { s: 121, m: 122, l: 123, xl: 124 };
+      if (mapping[size]) {
+        products.push({
+          id: 120,
+          variationId: mapping[size],
+          attributes: {
+            "attribute_pa_color": "black",
+            "attribute_pa_size": size
+          },
+          quantity: item.qty
+        });
+      }
+    }
+              // Tambahkan else if/else untuk produk lain jika perlu
+            });
+
+            if (products.length === 0) {
+              alert("Tidak ada produk valid di keranjang.");
+              return;
+            }
+
+            // Build a single URL for multiple add-to-cart (if possible)
+            // If only one product, direct to its add-to-cart URL
+            if (products.length === 1) {
+              const p = products[0];
+              const attrParams = new URLSearchParams(p.attributes).toString();
+              // Step 1: Add to cart
+              const fullCartUrl = `https://checkout.whoozer.xyz/cart/?add-to-cart=${p.id}&variation_id=${p.variationId}&${attrParams}&quantity=${p.quantity}`;
+window.location.href = fullCartUrl;
+              setTimeout(function() {
+                window.location.href = "https://checkout.whoozer.xyz/cart/";
+              }, 1200); // Delay agar WooCommerce proses add-to-cart
+              return;
+            }
+
+            // If multiple products, build a cart URL with all add-to-cart params (WooCommerce supports this)
+            let url = 'https://checkout.whoozer.xyz/cart/?';
+            url += products.map((p, i) => {
+              const attrParams = new URLSearchParams(p.attributes).toString();
+              return `add-to-cart=${p.id}&variation_id=${p.variationId}&${attrParams}&quantity=${p.quantity}`;
+            }).join('&');
+            // Langsung ke halaman cart WooCommerce
+            window.location.href = url;
+          });
+        }
+
+        const links = document.querySelectorAll('a[href="product.html"]');
+        links.forEach((link) => {
+          link.href = "/";
+        });
+
+        const sizeRadiosSecondary = document.querySelectorAll('.size-select input[type="radio"]');
+        const sizeLabels = document.querySelectorAll('.size-select label');
+        sizeRadiosSecondary.forEach((radio, idx) => {
+          radio.addEventListener('change', function() {
+            sizeLabels.forEach(label => label.classList.remove('selected'));
+            if (this.checked) {
+              sizeLabels[idx].classList.add('selected');
+            }
+          });
+        });
+
+        // === MOBILE SIDEBAR ===
+        const sidebar = document.getElementById("mobileSidebar");
+        const openBtn = document.getElementById("mobileMenuBtn");
+        const closeBtn = document.getElementById("closeSidebar");
+
+        if (openBtn && sidebar) {
+          openBtn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            sidebar.classList.add("active");
+          });
+        }
+        if (closeBtn && sidebar) {
+          closeBtn.addEventListener("click", function () {
+            sidebar.classList.remove("active");
+          });
+        }
+        // Klik di luar sidebar menu untuk menutup
+        document.addEventListener("mousedown", function (e) {
+          if (sidebar.classList.contains("active") && !sidebar.contains(e.target) && e.target !== openBtn && !openBtn.contains(e.target)) {
+            sidebar.classList.remove("active");
+          }
+        });
+
+        // === RECOMMENDED PRODUCTS FROM WOOCOMMERCE ===
+        async function loadRecommendedProducts() {
+          const container = document.getElementById("recommendedProducts");
+          if (!container) return;
+          // Loading skeleton
+          container.innerHTML = `<div class="skeleton-card"></div><div class="skeleton-card"></div><div class="skeleton-card"></div>`;
+          // Cek cache localStorage
+          const cacheKey = 'recommendedProductsCache';
+          const cache = localStorage.getItem(cacheKey);
+          let products = null;
+          if (cache) {
+            try {
+              const parsed = JSON.parse(cache);
+              if (parsed.expired > Date.now()) {
+                products = parsed.data;
+              } else {
+                localStorage.removeItem(cacheKey);
+              }
+            } catch {}
+          }
+          if (!products) {
+            try {
+              const res = await fetch("https://checkout.whoozer.xyz/wp-json/wc/store/products?per_page=4");
+              products = await res.json();
+              // Simpan ke cache 1 jam
+              localStorage.setItem(cacheKey, JSON.stringify({ data: products, expired: Date.now() + 3600 * 1000 }));
+            } catch (e) {
+              container.innerHTML = "Gagal memuat rekomendasi produk.";
+              return;
+            }
+          }
+          // Filter produk yang sedang dilihat agar tidak muncul di rekomendasi
+          const currentName = nama;
+          const hargaMapping = {
+            "jump sheep": 155000,
+            "faster 1 black": 155000,
+            "faster 1 white": 155000,
+            "not for satan": 220000,
+            "whoozer white": 155000,
+            "not for satan black": 220000
+          };
+          // Filter dengan normalisasi nama
+          const filtered = products.filter(p => normalizeName(p.name) !== normalizeName(currentName));
+          container.innerHTML = filtered.slice(0, 3).map(prod => {
+            const harga = hargaMapping[normalizeName(prod.name)] || (Number(prod.prices.price) / 100);
+            // Mapping khusus agar nama produk di localStorage selalu sama dengan Firestore
+            let namaFix = prod.name;
+            let nameFix = prod.name;
+            if (normalizeName(prod.name) === "not for satan" || normalizeName(prod.name) === "not for satan black") {
+              namaFix = "NOT FOR SATAN";
+              nameFix = "NOT FOR SATAN";
+            }
+            return `
+              <div class="recommended-card">
+                <a href="product.html" onclick="localStorage.setItem('selectedProduct', JSON.stringify({
+                  nama: '${namaFix.replace(/'/g, "\\'")}',
+                  name: '${nameFix.replace(/'/g, "\\'")}',
+                  price: ${harga},
+                  frontImg: '${prod.images[0]?.src || ""}',
+                  backImg: '${prod.images[1]?.src || ""}',
+                  description: '${(prod.short_description || '').replace(/'/g, "\\'")}',
+                  variantId: '${prod.id}'
+                }))">
+                  <img src="${prod.images[0]?.src || ""}" alt="${prod.name}" class="recommended-img" loading="lazy" width="300" height="300" />
+                  <div class="recommended-info">
+                    <h4>${prod.name}</h4>
+                    <p class="recommended-price">Rp ${harga.toLocaleString("id-ID")}</p>
+                  </div>
+                </a>
+              </div>
+            `;
+          }).join("");
+        }
+        loadRecommendedProducts();
+      });
+
+      window.showStockNotif = function (msg) {
+        var notif = document.getElementById("stockNotif");
+        if (!notif) return;
+        notif.textContent = msg || "Stok produk habis!";
+        notif.classList.add("show");
+        setTimeout(function () {
+          notif.classList.remove("show");
+        }, 2200);
+      };
+    </script>
+  </body>
+</html>

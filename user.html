@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WHZR</title>
+    <link rel="icon" type="images/png" href="images/logo fix.png" />
+    <link rel="stylesheet" href="css/user.css?v=3" />
+    <link rel="canonical" href="https://whoozer.xyz/" />
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!-- Cloudinary -->
+    <script
+      src="https://upload-widget.cloudinary.com/global/all.js?v=4"
+      type="text/javascript"
+    ></script>
+
+    <style>
+      /* Toast Style */
+      #toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+        z-index: 9999;
+        font-family: sans-serif;
+      }
+      #toast.show {
+        opacity: 1;
+      }
+      .error {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-left">
+        <button
+          id="mobileMenuBtn"
+          class="mobile-menu-btn"
+          aria-label="Open menu"
+        >
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+      <div class="nav-center">
+        <img
+          src="images/new logo navbar.gif"
+          alt="Logo"
+          class="logo"
+          loading="lazy"
+          width="120"
+          height="40"
+          decoding="async"
+        />
+      </div>
+      <div class="nav-right">
+        <a href="#" id="openCart"><i data-feather="shopping-cart"></i></a>
+        <button id="loginBtn" style="display: none" class="nav-auth-btn">
+          Login
+        </button>
+        <button
+          id="logoutBtn"
+          style="display: none"
+          class="nav-auth-btn desktop-only"
+        >
+          Logout
+        </button>
+      </div>
+    </header>
+
+    <!-- Sidebar menu (toggle menu) -->
+    <nav id="mobileSidebar" class="mobile-sidebar">
+      <button id="closeSidebar" aria-label="Close menu">&times;</button>
+      <a href="/" class="shop-link">SHOP</a>
+      <a href="/gallery.html" class="magz-link">MAGZ</a>
+      <button id="loginBtnMobile" style="display: none" class="nav-auth-btn">
+        Login
+      </button>
+      <div style="flex: 1"></div>
+    </nav>
+
+    <!-- Sidebar Cart -->
+    <div id="cartSidebar">
+      <button id="closeCart">✕</button>
+      <h3>Your Cart</h3>
+      <div id="cartItems"></div>
+      <p class="cart-total">Total: Rp <span id="cartTotal">0</span></p>
+      <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+    </div>
+
+    <!-- Profile Content -->
+    <main class="profile-container">
+      <h1>User Profile</h1>
+      <div class="profile-box">
+        <div class="profile-pic-section">
+          <img
+            id="userPhoto"
+            src="images/logo login.webp"
+            alt="Profile Picture"
+            loading="lazy"
+            width="120"
+            height="120"
+            decoding="async"
+          />
+          <input type="file" id="uploadPic" accept="image/*" />
+        </div>
+        <div class="profile-info">
+          <label
+            ><strong>Username:</strong>
+            <input type="text" id="usernameInput" disabled />
+          </label>
+          <label
+            ><strong>Email:</strong>
+            <input type="email" id="emailInput" disabled />
+          </label>
+          <label
+            ><strong>Phone:</strong>
+            <input type="text" id="phoneInput" disabled />
+          </label>
+          <button id="editBtn">Edit Profile</button>
+          <button id="saveBtn" style="display: none">Simpan</button>
+          <button id="logoutBtnProfile" class="logout-profile-btn">
+            Logout
+          </button>
+          <div id="toast" class="toast"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        <a
+          href="contactus.html"
+          style="color: #e5ff00;"
+        >
+          Contact Us
+        </a>
+        &nbsp;|&nbsp;
+        <a href="terms.html" style="color: #e5ff00;"
+          >Terms of Services</a
+        >
+        &nbsp;|&nbsp;
+        <a
+          href="aboutus.html"
+          style="color: #e5ff00;"
+        >
+          About Us
+        </a>
+      </p>
+      <p>© 2025 WHOOZER. All Rights Reserved</p>
+    </footer>
+
+    <script>
+      feather.replace();
+    </script>
+    <!-- Firebase v8 CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase config and user logic -->
+    <script src="js/firebase-config.js?v=4"></script>
+    <script src="js/user.js?v=4"></script>
+  </body>
+</html>

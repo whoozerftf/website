@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WHZR</title>
+    <link rel="canonical" href="https://whoozer.xyz/" />
+    <link rel="icon" type="images/png" href="images/logo fix.png" />
+    <link rel="stylesheet" href="css/gallery.css?v=2" />
+    <script src="https://unpkg.com/feather-icons"></script>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-left">
+        <button
+          id="mobileMenuBtn"
+          class="mobile-menu-btn"
+          aria-label="Open menu"
+        >
+          <i data-feather="menu"></i>
+        </button>
+      </div>
+      <div class="nav-center">
+        <img
+          src="images/new logo navbar.gif"
+          alt="Logo"
+          class="logo"
+          loading="lazy"
+          width="120"
+          height="40"
+          decoding="async"
+        />
+      </div>
+      <div class="nav-right">
+        <a href="user.html" id="authIcon"><i data-feather="user"></i></a>
+      </div>
+      <nav id="mobileSidebar" class="mobile-sidebar">
+        <button id="closeSidebar" aria-label="Close menu">&times;</button>
+        <a href="/">SHOP</a>
+        <a href="/gallery.html">MAGZ</a>
+      </nav>
+    </header>
+
+    <div class="gallery-magazine">
+      <div class="article-cover-container cover-shift">
+        <a href="article1.html">
+          <img
+            src="images/cover article 1.webp"
+            alt="Article 1"
+            class="article-cover"
+            loading="lazy"
+            width="300"
+            height="400"
+            decoding="async"
+          />
+        </a>
+        <div class="article-description">
+          <h2><a href="article1.html">WHOOZER MAGZ: THE FIRST JUMP & WHAT CAME AFTER </a></h2>
+          <div class="desc-text">
+            WHOOZER started with doubt, then jumped—no plan, no safety net. The first drop, “Jump Sheep”, broke out of the cage with raw energy and real vibes.<br>
+            Months later, new faces joined, sales grew, and WHOOZER became a movement—built on instinct, not perfection.<br>
+            <span class="desc-highlight">Faster than fear. This is just the beginning.</span>
+          </div>
+        </div>
+      </div>
+      <!-- cover berikutnya -->
+    </div>
+
+    <footer>
+      <p>
+         <a href="contactus.html">
+      Contact Us
+    </a>
+    &nbsp;|&nbsp;
+        <a href="terms.html">
+          Terms of Services</a
+        >
+         &nbsp;|&nbsp;
+        <a
+          href="aboutus.html"
+        >
+          About Us
+        </a>
+      </p>
+      <p>© 2025 WHOOZER. All Rights Reserved</p>
+    </footer>
+
+    <script>
+      feather.replace();
+
+      const sidebar = document.getElementById("mobileSidebar");
+      const openBtn = document.getElementById("mobileMenuBtn");
+      const closeBtn = document.getElementById("closeSidebar");
+
+      openBtn.addEventListener("click", function (e) {
+        e.stopPropagation();
+        sidebar.classList.add("active");
+      });
+      closeBtn.addEventListener("click", function () {
+        sidebar.classList.remove("active");
+      });
+      // Klik di luar sidebar untuk menutup
+      document.addEventListener("click", function (e) {
+        if (
+          sidebar.classList.contains("active") &&
+          !sidebar.contains(e.target) &&
+          e.target !== openBtn &&
+          !openBtn.contains(e.target)
+        ) {
+          sidebar.classList.remove("active");
+        }
+      });
+    </script>
+  </body>
+</html>

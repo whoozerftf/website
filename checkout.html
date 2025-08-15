@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Checkout - whzr.xyz</title>
+    <link rel="stylesheet" href="css/style.css?v=3" />
+    <link rel="canonical" href="https://whoozer.xyz/" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+      /* Tambahan styling khusus checkout */
+      body {
+        background-color: blue;
+        color: #e5ff00;
+        font-family: "Courier New", monospace;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .checkout-section {
+        flex: 1;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .checkout-total {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        display: inline-block;
+        margin-bottom: 30px;
+      }
+
+      .checkout-total * {
+        color: #ff0000 !important;
+        font-weight: bold;
+      }
+
+      .payment-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .payment-buttons button {
+        background: #e5ff00;
+        color: black;
+        font-weight: bold;
+        padding: 12px 20px;
+        border-radius: 6px;
+        border: none;
+        font-size: 16px;
+        cursor: pointer;
+        width: 250px;
+      }
+
+      footer {
+        background-color: black;
+        color: #e5ff00;
+        text-align: center;
+        padding: 15px 0;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar Start -->
+    <header class="navbar">
+      <div class="nav-left">
+        <a href="index.html">SHOP</a>
+        <a href="gallery.html">MAGZ</a>
+      </div>
+      <div class="nav-center">
+        <img src="images/wuzer muter 2.gif" alt="Logo" class="logo" />
+      </div>
+      <div class="nav-right">
+        <a href="#" id="openCart"><i data-feather="shopping-cart"></i></a>
+        <a href="#"><i data-feather="user"></i></a>
+      </div>
+    </header>
+    <!-- Navbar End -->
+
+    <!-- Checkout Section Start -->
+    <section class="checkout-section">
+      <h1>Checkout</h1>
+
+      <div class="checkout-total">
+        <p>Total Pembayaran:</p>
+        <p>Rp <span id="checkoutTotal">0</span></p>
+      </div>
+
+      <h2>Pilih Metode Pembayaran</h2>
+
+      <div class="payment-buttons">
+        <button>Transfer Bank (BCA)</button>
+        <button>Dana / OVO / Gopay</button>
+      </div>
+    </section>
+    <!-- Checkout Section End -->
+
+    <!-- Footer Start -->
+    <footer>
+      <p>© 2025 WHOOZER. All Right Reserved</p>
+    </footer>
+    <!-- Footer End -->
+
+    <!-- Feather Icons Replace -->
+    <script>
+      feather.replace();
+    </script>
+
+    <!-- Login Check & Checkout Total Script -->
+    <script>
+      // Cek apakah user sudah login
+      if (localStorage.getItem("isLoggedIn") !== "true") {
+        alert("Silakan login terlebih dahulu untuk checkout.");
+        window.location.href = "login.html";
+      }
+
+      // Hitung total checkout
+      let cart = JSON.parse(localStorage.getItem("cart")) || [];
+      let total = 0;
+
+      cart.forEach((item) => {
+        total += item.price * item.qty;
+      });
+
+      document.getElementById("checkoutTotal").textContent =
+        total.toLocaleString();
+    </script>
+  </body>
+</html>

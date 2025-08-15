@@ -1,0 +1,829 @@
+/* === RESET & GLOBAL === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+  background-color: #0400ff;
+  color: #e5ff00;
+  font-family: "Courier New", monospace;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+a:hover {
+  color: #ff0000;
+}
+
+/* === BUTTONS === */
+button {
+  background-color: #0400ff;
+  color: #e5ff00;
+  border: 1px solid #e5ff00;
+  padding: 10px 20px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #e5ff00;
+  color: #000;
+}
+
+/* === NAVBAR === */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000;
+  padding: 0px 14px;
+  border-bottom: 2px solid #e5ff00;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-left .mobile-menu-btn {
+  order: 1;
+  background: none;
+  border: none;
+  color: #e5ff00;
+  font-size: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2px;
+  z-index: 1100;
+  margin-right: 20px;
+}
+
+.nav-center {
+  order: 2;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-right {
+  order: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  height: 65px;
+  border: none !important;
+  border-radius: 90px !important;
+}
+
+.nav-left a,
+.nav-right a {
+  color: #e5ff00;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.nav-left a:hover,
+.nav-right a:hover {
+  color: #0400ff;
+}
+
+.nav-right i {
+  width: 28px !important;
+  height: 28px !important;
+  color: #e5ff00;
+  stroke-width: 2.2;
+  vertical-align: middle;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.nav-right i:hover {
+  transform: scale(1.2);
+  color: #ff0000;
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 70px;
+  left: 30px;
+  background: #000;
+  border: 2px solid #e5ff00;
+  border-radius: 8px;
+  padding: 20px 30px;
+  z-index: 2000;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+.mobile-menu a {
+  color: #e5ff00;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 18px;
+  display: block;
+}
+.mobile-menu a:last-child {
+  margin-bottom: 0;
+}
+.mobile-menu.active {
+  display: flex;
+}
+
+.notification-bar {
+  background-color: #ff0000; /* merah terang */
+  color: #e5ff00;
+  text-align: center;
+  padding: 10px;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 2px solid #e5ff00; /* opsional, untuk efek neon */
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.menu-icon {
+  display: none; /* Hanya muncul di HP */
+  cursor: pointer;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nav-links {
+    display: none; /* Sembunyikan link pada tampilan awal di HP */
+    flex-direction: column;
+    background-color: black;
+    position: absolute;
+    top: 40px;
+    width: 100%;
+  }
+
+  .nav-links.active {
+    display: flex; /* Tampilkan saat menu dibuka */
+  }
+
+  .menu-icon {
+    display: block;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .mobile-menu {
+    left: 10px;
+    top: 60px;
+  }
+  .navbar {
+    flex-direction: row;
+    padding: 0px 14px;
+  }
+  .logo {
+    height: 68px;
+  }
+  .nav-left {
+    order: 1;
+  }
+  .nav-center {
+    order: 2;
+  }
+  .nav-right {
+    order: 3;
+    gap: 12px !important;
+  }
+  .mobile-menu-btn {
+    font-size: 28px;
+    margin-right: 0;
+  }
+}
+
+
+/* === PRODUCT GRID === */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  overflow-x: auto; /* Scroll horizontal jika produk banyak */
+  padding: 30px;
+  background-color: blue;
+  min-width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* Kartu produk */
+.product-card {
+  background-color: #0400ff;
+  padding: 0px;
+  text-align: center;
+  color: #e5ff00;
+  transition: background-color 0.3s ease;
+  width: 175px !important;
+  flex-shrink: 0; /* Supaya tidak mengecil */
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Gambar produk */
+.product-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: auto; /* Tambahkan ini untuk memperbesar gambar */
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%; /* Tambahkan ini untuk gambar lebih besar */
+  object-fit: cover; /* Tambahkan ini agar gambar tidak terpotong */
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.product-image .back-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.front-img {
+  z-index: 1;
+}
+
+.back-img {
+  z-index: 2;
+  opacity: 0;
+}
+
+.product-image:hover .front-img {
+  opacity: 0;
+}
+
+.product-image:hover .back-img {
+  opacity: 1;
+}
+
+/* Nama dan harga produk */
+.product-card h3 {
+  font-size: 1rem;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+
+.product-card .price {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* Tombol Add to Cart */
+.product-card .add-cart-btn {
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  background-color: transparent;
+  border: 1px solid #e5ff00;
+  color: #e5ff00;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.product-card .add-cart-btn:hover {
+  background-color: #e5ff00;
+  color: #0400ff;
+}
+.stock-label {
+  font-size: 0.9rem;
+  color: #e5ff00;
+  margin-bottom: 8px;
+  font-family: "Courier New", monospace;
+  letter-spacing: 1px;
+  text-shadow: 0 0 2px #000, 0 0 6px #0400ff;
+}
+.stock-value {
+  font-weight: bold;
+  color: #ff0000;
+  margin-left: 2px;
+}
+.stock-label.sold-out, .stock-value.sold-out {
+  font-weight: bold;
+}
+.btn-soldout,
+.product-card .add-cart-btn:disabled {
+  background: #222 !important;
+  color: #ff0000 !important;
+  border: 1px solid #ff0000 !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+  text-shadow: 0 0 4px #000;
+}
+.product-card.sold-out {
+  background: #00000040 !important; /* warna abu-abu terang */
+  position: relative;
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+.product-card.sold-out::before {
+  content: "Sold Out";
+  position: absolute;
+  top: 4px;
+  left: -2px;
+  background: rgb(0 0 0 / 0%);
+  color: #000000;
+  font-size: 1.3rem;
+  font-weight: bold;
+  padding: 6px 18px;
+  border-radius: 8px;
+  z-index: 2;
+  letter-spacing: 0px;
+}
+
+/* === PRODUCT GRID RESPONSIVE === */
+@media (min-width: 768px) and (max-width: 1023px) {
+   .product-grid {
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    align-items: center;
+    gap: 25px; /* Sesuaikan jarak antar elemen */
+    padding: 20px; /* Tambahkan padding untuk memberikan ruang */
+  }
+  .product-card {
+    grid-template-columns: repeat(4, 1fr);
+    width: 180px;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px; /* Sesuaikan jarak antar elemen */
+    padding: 55px 40px; /* Tambahkan padding untuk memberikan ruang */
+  }
+
+  .product-card {
+    width: 270px !important; /* Ukuran yang lebih proporsional */
+    margin: 0 auto; /* Pusatkan elemen */
+    padding: 20px; /* Tambahkan padding untuk tampilan lebih baik */
+  }
+
+}
+@media (min-width: 1440px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    justify-content: center;
+    align-items: flex-start;
+    gap: 40px; /* Sesuaikan jarak antar elemen */
+    padding: 55px 40px; /* Tambahkan padding untuk memberikan ruang */
+  }
+
+  .product-card {
+    width: 270px; /* Ukuran yang lebih proporsional */
+    margin: 0 auto; /* Pusatkan elemen */
+    padding: 20px; /* Tambahkan padding untuk tampilan lebih baik */
+  }
+}
+
+/* === CART SIDEBAR === */
+#cartSidebar {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 320px;
+  height: 100%;
+  background-color: #000;
+  color: #e5ff00;
+  border-left: 2px solid #e5ff00;
+  padding: 20px;
+  transition: right 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+#cartSidebar.active {
+  right: 0;
+}
+
+#cartSidebar h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+#cartSidebar hr {
+  border: 0.5px solid #333;
+}
+
+#cartSidebar img {
+  border-radius: 4px;
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+#closeCart {
+  background: none;
+  border: none;
+  color: #e5ff00;
+  font-size: 30px;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.cart-item {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #444;
+  position: relative;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ff0000;
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.empty-cart-message {
+  color: #ff0000;
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+}
+
+#checkoutBtn {
+  background-color: #e5ff00;
+  color: #0400ff;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  font-family: "Courier New", monospace;
+  font-weight: bold;
+  margin-top: 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#checkoutBtn:hover {
+  background-color: #0400ff;
+  color: #e5ff00;
+}
+
+/* Checkout button in cart sidebar */
+#checkoutBtn.checkout-btn {
+  color: #000 !important;
+}
+
+/* === QUANTITY CONTROL === */
+.qty-control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background-color: #111;
+  padding: 6px 10px;
+  border: 1px solid #e5ff00;
+  border-radius: 6px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.qty-btn {
+  background-color: #e5ff00;
+  color: #000;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.qty-btn:hover {
+  background-color: #fff800;
+}
+
+.qty-display {
+  min-width: 24px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+  color: #e5ff00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === PAYMENT MODAL === */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.9);
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.modal-content {
+  background: #111;
+  border: 2px solid #e5ff00;
+  color: #e5ff00;
+  font-family: "Courier New", monospace;
+  padding: 30px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.modal-content button {
+  background: #e5ff00;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.modal-content button:hover {
+  background: #fff800;
+}
+
+.modal-content input[type="file"] {
+  margin-top: 15px;
+  color: #fff;
+}
+
+.modal-close {
+  background: transparent;
+  color: #ff0000;
+  border: none;
+  font-size: 20px;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  cursor: pointer;
+}
+
+/* === GALLERY (MAGAZINE STYLE) === */
+.gallery-magazine {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 50px;
+}
+
+.gallery-magazine img {
+  width: 100%;
+  border: 2px solid #e5ff00;
+  border-radius: 8px;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.gallery-magazine img:hover {
+  transform: scale(1.03);
+  border-color: #ff0000;
+}
+
+/* === FOOTER === */
+footer {
+  text-align: center;
+  padding: 20px 20px !important; /* Menambah padding atas dan bawah */
+  color: #e5ff00 !important;
+  border-top: 2px solid #e5ff00;
+  background-color: #000 !important;
+  font-size: 13px;
+  margin-top: 100px;
+}
+
+/* Sembunyikan .nav-left a di navbar utama, tapi tampilkan di sidebar saja */
+.nav-left a {
+  display: none !important;
+}
+.mobile-sidebar a {
+  display: block !important;
+}
+
+/* === SIDEBAR (TOGGLE MENU) === */
+.mobile-sidebar {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 240px;
+  max-width: 320px;
+  height: 100vh;
+  background: #000;
+  border-right: 2px solid #e5ff00;
+  box-shadow: 2px 0 16px rgba(0, 0, 0, 0.2);
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 0 0 15px;
+  transition: left 0.3s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+.mobile-sidebar.active {
+  left: 0;
+}
+.mobile-sidebar button#closeSidebar {
+  background: none;
+  border: none;
+  color: #e5ff00;
+  font-size: 32px;
+  align-self: flex-end;
+  margin-bottom: 30px;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.mobile-sidebar button#closeSidebar:hover {
+  color: #ff0000;
+}
+.mobile-sidebar a {
+  color: #e5ff00;
+  font-size: 22px;
+  font-weight: bold;
+  text-decoration: none;
+  margin-bottom: 0px;
+  display: block;
+  transition: color 0.2s;
+}
+.mobile-sidebar a:hover {
+  color: #ff0000;
+}
+
+/* === PRIVACY POLICY POPUP === */
+.privacy-banner {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+  padding: 15px;
+  z-index: 9999;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.4);
+}
+
+.privacy-banner p {
+  margin: 0 0 10px;
+}
+
+.privacy-banner a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.privacy-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.btn-outline,
+.btn-solid {
+  padding: 8px 14px;
+  font-size: 13px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #fff;
+  background: transparent;
+  color: #fff;
+  transition: all 0.2s ease;
+}
+
+.btn-solid {
+  background-color: #fff;
+  color: #000;
+  font-weight: bold;
+}
+
+.btn-outline:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.btn-solid:hover {
+  background-color: #e0e0e0;
+}
+
+/* === PRIVACY POLICY PAGE THEME === */
+.privacy-policy-container {
+  max-width: 700px;
+  margin: 40px auto 60px auto;
+  background: #000;
+  color: #e5ff00;
+  border-radius: 18px;
+  padding: 2.5rem 2rem 2rem 2rem;
+  font-family: "Courier New", monospace;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+.privacy-policy-container h1 {
+  font-size: 2.1rem;
+  margin-bottom: 1.5rem;
+  color: #e5ff00;
+  text-align: center;
+  letter-spacing: 2px;
+}
+.privacy-policy-container h2,
+.privacy-policy-container h3 {
+  color: #ffe600;
+  margin-top: 2.2rem;
+  margin-bottom: 0.7rem;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+}
+.privacy-policy-container p,
+.privacy-policy-container li {
+  font-size: 1.1rem;
+  margin-bottom: 1.2rem;
+  color: #e5ff00;
+  line-height: 1.6;
+  text-align: left;
+}
+.privacy-policy-container strong {
+  color: #ffe600;
+}
+.privacy-policy-container ul {
+  margin-left: 1.2rem;
+  margin-bottom: 1.2rem;
+}
+.privacy-policy-container a {
+  color: #ffe600;
+  text-decoration: underline;
+  word-break: break-all;
+}
+.privacy-policy-container a:hover {
+  color: #0400ff;
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .privacy-policy-container {
+    max-width: 95vw;
+    padding: 2rem 1.2rem 1.5rem 1.2rem;
+    font-size: 0.97rem;
+  }
+  .privacy-policy-container h1 {
+    font-size: 1.7rem;
+  }
+}
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .privacy-policy-container {
+    max-width: 99vw;
+    padding: 1.1rem 5vw 1.2rem 5vw;
+    font-size: 0.95rem;
+  }
+  .privacy-policy-container h1 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+}
+@media (min-width: 1440px) {
+  .privacy-policy-container {
+    max-width: 700px;
+    padding: 2.5rem 2rem 2rem 2rem;
+    font-size: 1.1rem;
+  }
+  .privacy-policy-container h1 {
+    font-size: 2.1rem;
+    margin-bottom: 1.5rem;
+  }
+}

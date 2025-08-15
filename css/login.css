@@ -1,0 +1,229 @@
+/* login.css FINAL */
+
+/* === BASE === */
+body {
+  background-color: #0400ff;
+  color: #e5ff00;
+  font-family: "Courier New", Courier, monospace;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: center; /* Center the logo */
+  align-items: center;
+  background-color: #000;
+  padding: 5px;
+  border-bottom: 2px solid #e5ff00;
+  height: auto; /* Allow height to adjust based on content */
+}
+
+.logo {
+  /* height: 100px; */
+}
+
+/* Navbar agar tetap rapi di layar kecil */
+@media (max-width: 600px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Kurangi jarak antar elemen */
+    padding: 10px; /* Kurangi padding untuk mengurangi ukuran */
+    height: auto; /* Pastikan tinggi menyesuaikan konten */
+  }
+
+  .nav-center {
+    position: static;
+    transform: none;
+  }
+
+  .logo {
+    height: 50px; /* Kurangi tinggi logo */
+  }
+}
+
+/* === LOGIN/REGISTER CONTAINER === */
+.login-container {
+  flex: 1 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+/* === FORM BOX === */
+.login-form {
+  background-color: #000;
+  padding: 40px 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  border: 2px solid #e5ff00;
+  text-align: center;
+  box-shadow: 0 0 15px #e5ff00;
+}
+
+/* Title */
+.login-form h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #e5ff00;
+}
+
+/* Form Inputs */
+.login-form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form input {
+  background: transparent;
+  border: 1px solid #e5ff00;
+  color: #e5ff00;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+}
+
+.login-form input::placeholder {
+  color: #e5ff00;
+  opacity: 0.7;
+}
+
+.login-form input:focus {
+  outline: none;
+}
+
+/* Button */
+.login-form button {
+  background-color: #e5ff00;
+  color: #000;
+  border: none;
+  padding: 12px;
+  margin-top: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 16px;
+  font-family: "Courier New", Courier, monospace;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.login-form button:hover {
+  background-color: #0400ff;
+  color: #e5ff00;
+}
+
+/* Note Text */
+.note {
+  font-size: 14px;
+  margin-top: 15px;
+  color: #e5ff00;
+}
+
+.note a {
+  color: #e5ff00;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.note a:hover {
+  color: #fff;
+}
+
+/* === NOTIFICATION === */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #000;
+  color: #e5ff00;
+  border: 2px solid #e5ff00;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 16px;
+  box-shadow: 0 0 15px #e5ff00;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(-20px);
+  animation: slideDownFade 0.5s forwards;
+}
+
+/* Notification for error */
+.notification.error {
+  color: #ff0000;
+  border-color: #ff0000;
+  box-shadow: 0 0 15px #ff0000;
+}
+
+/* Slide down animation */
+@keyframes slideDownFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === FOOTER === */
+footer {
+  flex-shrink: 0;
+  background-color: #000;
+  text-align: center;
+  font-size: 12px;
+  padding: 20px 10px;
+  border-top: 2px solid #e5ff00;
+  margin-top: 0px;
+}
+
+/* === UTILITY === */
+.hidden {
+  display: none;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 500px) {
+  .login-form {
+    padding: 30px 20px;
+  }
+
+  .login-form h1 {
+    font-size: 24px;
+  }
+}
+
+/* Popup error login styling simpel, tetap tema biru-kuning */
+.login-error-msg {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 240px;
+  max-width: 90vw;
+  z-index: 10001;
+  background: #e5ff00;
+  color: #000;
+  border: 2px solid #0400ff;
+  box-shadow: 0 4px 16px #0003;
+  font-size: 1rem;
+  padding: 14px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+.login-error-msg:hover {
+  background: #0400ff;
+  color: #e5ff00;
+}

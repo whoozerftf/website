@@ -1,0 +1,1 @@
+/* Minified: see original for comments and formatting */.gallery-magazine{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:30px;padding:50px}.gallery-magazine img{width:100%;border:2px solid #e5ff00;border-radius:8px;transition:transform .3s,border-color .3s}.gallery-magazine img:hover{transform:scale(1.03);border-color:#ff0000}

@@ -1,0 +1,60 @@
+/* CSS dasar untuk checkout */
+body {
+  background-color: blue;
+  color: #e5ff00;
+  font-family: "Courier New", monospace;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Area utama checkout */
+.checkout-section {
+  flex: 1;
+  padding: 40px;
+  text-align: center;
+}
+
+/* Kotak putih total pembayaran */
+.checkout-total {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+/* Semua teks di dalam kotak putih dibuat merah */
+.checkout-total * {
+  color: #ff0000 !important;
+}
+
+/* Tulisan "Pilih Metode Pembayaran" */
+.checkout-section h2 {
+  margin-bottom: 20px;
+}
+
+/* Button pilihan pembayaran */
+.checkout-section button {
+  background: #e5ff00;
+  color: black;
+  font-weight: bold;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  width: 250px;
+  margin: 10px 0;
+}
+
+/* Footer fix di bawah */
+footer {
+  background-color: black;
+  color: #e5ff00;
+  text-align: center;
+  padding: 15px 0;
+  margin-top: auto;
+  font-family: "Courier New", monospace;
+  font-size: 14px;
+}
